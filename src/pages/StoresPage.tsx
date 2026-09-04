@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CONTACT_FIELDS, STORE_FIELDS } from '../config/fields';
+import { CONTACT_FIELDS, STORE_FIELDS, type FieldDef } from '../config/fields';
 import { DynamicForm } from '../components/DynamicForm';
 import { normalizeStoreNumber } from '../lib/storeMatch';
 import {
@@ -31,6 +31,20 @@ function contactsForStore(contacts: ContactRecord[], storeNumber: string): Conta
   const target = normalizeStoreNumber(storeNumber);
   if (!target) return [];
   return contacts.filter((c) => normalizeStoreNumber(c.data.storeNumber) === target);
+}
+
+function FieldList({ fields, data }: { fields: FieldDef[]; data: FieldValues }) {
+  return (
+    <>
+      {fields.map((f) =>
+        data[f.key] ? (
+          <span key={f.key} className="record-field">
+            <span className="field-label">{f.label}:</span> {data[f.key]}
+          </span>
+        ) : null
+      )}
+    </>
+  );
 }
 
 function ContactChips({ contacts }: { contacts: ContactRecord[] }) {
@@ -167,15 +181,7 @@ export function StoresPage() {
             </button>
           </div>
           <div className="record-summary">
-            {listFields
-              .filter((f) => f.key !== 'notes')
-              .map((f) =>
-                activeStore.data[f.key] ? (
-                  <span key={f.key} className="record-field">
-                    {f.label}: {activeStore.data[f.key]}
-                  </span>
-                ) : null
-              )}
+            <FieldList fields={listFields.filter((f) => f.key !== 'notes')} data={activeStore.data} />
           </div>
           <ContactChips contacts={contactsForStore(contacts, activeStore.data.storeNumber ?? '')} />
           <h4>Notes</h4>
@@ -236,7 +242,7 @@ export function StoresPage() {
 
       {sorted.length > 1 && <p className="carousel-hint">← Swipe to browse stores →</p>}
 
-      <ul className="record-list store-carousel">
+      <ul className={`record-list store-carousel${activeStore ? ' is-compact' : ''}`}>
         {sorted.map((store) => (
           <li
             key={store.id}
@@ -244,15 +250,7 @@ export function StoresPage() {
             onClick={() => setActive(store.id)}
           >
             <div className="record-summary">
-              {listFields
-                .filter((f) => f.key !== 'notes')
-                .map((f) =>
-                  store.data[f.key] ? (
-                    <span key={f.key} className="record-field">
-                      {f.label}: {store.data[f.key]}
-                    </span>
-                  ) : null
-                )}
+              <FieldList fields={listFields.filter((f) => f.key !== 'notes')} data={store.data} />
               <ContactChips contacts={contactsForStore(contacts, store.data.storeNumber ?? '')} />
             </div>
             <button
