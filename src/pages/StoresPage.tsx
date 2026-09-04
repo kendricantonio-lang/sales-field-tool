@@ -234,7 +234,9 @@ export function StoresPage() {
         </div>
       )}
 
-      <ul className="record-list">
+      {sorted.length > 1 && <p className="carousel-hint">← Swipe to browse stores →</p>}
+
+      <ul className="record-list store-carousel">
         {sorted.map((store) => (
           <li
             key={store.id}

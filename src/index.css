@@ -166,6 +166,13 @@ select {
   color: var(--muted);
 }
 
+.carousel-hint {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
 .store-card {
   align-items: flex-start;
   cursor: pointer;
@@ -253,6 +260,26 @@ select {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+}
+
+.store-carousel {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 0.25rem 0.25rem 1.25rem;
+  margin: 0 -0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.store-carousel .store-card {
+  flex: 0 0 85%;
+  scroll-snap-align: center;
+}
+
+.store-carousel p {
+  flex: 0 0 100%;
 }
 
 .record-card {
