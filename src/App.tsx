@@ -4,6 +4,7 @@ import { LoginPage } from './pages/LoginPage';
 import { ContactsPage } from './pages/ContactsPage';
 import { StoresPage } from './pages/StoresPage';
 import { NotesPage } from './pages/NotesPage';
+import { MapPage } from './pages/MapPage';
 
 export default function App() {
   const { user, loading, signOut } = useAuth();
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/stores" element={<StoresPage />} />
+          <Route path="/map" element={<MapPage />} />
           <Route path="*" element={<Navigate to="/notes" replace />} />
         </Routes>
       </main>
@@ -44,6 +46,9 @@ export default function App() {
         </NavLink>
         <NavLink to="/stores" className={({ isActive }) => (isActive ? 'active' : '')}>
           Stores
+        </NavLink>
+        <NavLink to="/map" className={({ isActive }) => (isActive ? 'active' : '')}>
+          Map
         </NavLink>
       </nav>
     </div>

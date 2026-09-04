@@ -342,6 +342,70 @@ select {
   margin-bottom: 0.75rem;
 }
 
+.map-disclaimer {
+  margin-bottom: 1rem;
+}
+
+.map-wrap {
+  position: relative;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.map-bg {
+  fill: color-mix(in srgb, var(--accent) 5%, var(--surface));
+}
+
+.map-ref-label {
+  fill: var(--muted);
+  font-size: 15px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.map-pin {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+  cursor: pointer;
+}
+
+.map-pin.selected {
+  fill: var(--danger);
+}
+
+.map-popup {
+  position: absolute;
+  transform: translate(-50%, -110%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 0.85rem;
+  min-width: 170px;
+  z-index: 10;
+}
+
+.map-popup button {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.map-note {
+  margin-top: 0.75rem;
+}
+
 .week-nav {
   display: flex;
   align-items: center;

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { CONTACT_FIELDS, STORE_FIELDS, type FieldDef } from '../config/fields';
 import { DynamicForm } from '../components/DynamicForm';
 import { normalizeStoreNumber } from '../lib/storeMatch';
+import { ACTIVE_STORE_KEY } from '../lib/activeStore';
 import {
   createStore,
   listContacts,
@@ -11,8 +12,6 @@ import {
   type FieldValues,
   type StoreRecord,
 } from '../lib/db';
-
-const ACTIVE_STORE_KEY = 'sft.activeStoreId';
 
 const listFields = STORE_FIELDS.filter((f) => f.showInList);
 const contactPreviewFields = CONTACT_FIELDS.filter((f) => f.key !== 'storeNumber');
