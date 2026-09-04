@@ -168,6 +168,37 @@ select {
 
 .store-card {
   align-items: flex-start;
+  cursor: pointer;
+  border-width: 1px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.store-card.is-active {
+  border-color: var(--accent);
+  border-width: 2px;
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.edit-button {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.7rem;
+}
+
+.active-store-panel {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.active-store-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.active-store-header h3 {
+  margin: 0;
 }
 
 .panel {

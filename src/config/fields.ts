@@ -36,6 +36,7 @@ export const STORE_FIELDS: FieldDef[] = [
     placeholder: 'e.g. Mon, Thu',
   },
   { key: 'deliOps', label: 'Deli Ops', type: 'text', showInList: true },
+  { key: 'notes', label: 'Notes', type: 'textarea' },
 ];
 
 export const CHECKLIST_FIELDS: FieldDef[] = [

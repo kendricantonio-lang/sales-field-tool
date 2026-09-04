@@ -91,11 +91,6 @@ export async function updateStore(id: string, values: FieldValues): Promise<Stor
   return data as StoreRecord;
 }
 
-export async function deleteStore(id: string): Promise<void> {
-  const { error } = await supabase.from('stores').delete().eq('id', id);
-  if (error) throw error;
-}
-
 export async function listVisits(): Promise<VisitRecord[]> {
   const { data, error } = await supabase
     .from('visits')

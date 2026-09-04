@@ -4,7 +4,6 @@ import { DynamicForm } from '../components/DynamicForm';
 import { normalizeStoreNumber } from '../lib/storeMatch';
 import {
   createStore,
-  deleteStore,
   listContacts,
   listStores,
   updateStore,
@@ -12,6 +11,8 @@ import {
   type FieldValues,
   type StoreRecord,
 } from '../lib/db';
+
+const ACTIVE_STORE_KEY = 'sft.activeStoreId';
 
 const listFields = STORE_FIELDS.filter((f) => f.showInList);
 const contactPreviewFields = CONTACT_FIELDS.filter((f) => f.key !== 'storeNumber');
@@ -60,10 +61,24 @@ export function StoresPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<FieldValues>({});
   const [showForm, setShowForm] = useState(false);
+  const [activeStoreId, setActiveStoreId] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(ACTIVE_STORE_KEY);
+    } catch {
+      return null;
+    }
+  });
+  const [notesDraft, setNotesDraft] = useState('');
 
   useEffect(() => {
     refresh();
   }, []);
+
+  const activeStore = stores.find((s) => s.id === activeStoreId) ?? null;
+
+  useEffect(() => {
+    setNotesDraft(activeStore?.data.notes ?? '');
+  }, [activeStore?.id, activeStore?.data.notes]);
 
   async function refresh() {
     setLoading(true);
@@ -74,6 +89,20 @@ export function StoresPage() {
     const failure = storeResult.status === 'rejected' ? storeResult.reason : contactResult.status === 'rejected' ? contactResult.reason : null;
     setError(failure instanceof Error ? failure.message : failure ? 'Failed to load data' : null);
     setLoading(false);
+  }
+
+  function setActive(id: string) {
+    const nextId = activeStoreId === id ? null : id;
+    setActiveStoreId(nextId);
+    try {
+      if (nextId) {
+        localStorage.setItem(ACTIVE_STORE_KEY, nextId);
+      } else {
+        localStorage.removeItem(ACTIVE_STORE_KEY);
+      }
+    } catch {
+      // localStorage unavailable — active pin just won't survive a reload.
+    }
   }
 
   function startCreate() {
@@ -102,13 +131,13 @@ export function StoresPage() {
     }
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm('Delete this store?')) return;
+  async function handleSaveNotes() {
+    if (!activeStore) return;
     try {
-      await deleteStore(id);
+      await updateStore(activeStore.id, { ...activeStore.data, notes: notesDraft });
       await refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete store');
+      setError(err instanceof Error ? err.message : 'Failed to save notes');
     }
   }
 
@@ -128,6 +157,44 @@ export function StoresPage() {
         <h2>Stores</h2>
         <button onClick={startCreate}>+ Add Store</button>
       </div>
+
+      {activeStore && (
+        <div className="panel active-store-panel">
+          <div className="active-store-header">
+            <h3>📌 Active Store</h3>
+            <button className="link-button" onClick={() => setActive(activeStore.id)}>
+              Unpin
+            </button>
+          </div>
+          <div className="record-summary">
+            {listFields
+              .filter((f) => f.key !== 'notes')
+              .map((f) =>
+                activeStore.data[f.key] ? (
+                  <span key={f.key} className="record-field">
+                    {f.label}: {activeStore.data[f.key]}
+                  </span>
+                ) : null
+              )}
+          </div>
+          <ContactChips contacts={contactsForStore(contacts, activeStore.data.storeNumber ?? '')} />
+          <h4>Notes</h4>
+          <textarea
+            value={notesDraft}
+            onChange={(e) => setNotesDraft(e.target.value)}
+            placeholder="Quick notes about this store..."
+            rows={4}
+          />
+          <div className="panel-actions">
+            <button onClick={handleSaveNotes} disabled={notesDraft === (activeStore.data.notes ?? '')}>
+              Save Notes
+            </button>
+            <button className="secondary" onClick={() => startEdit(activeStore)}>
+              Edit Store Info
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="filter-row">
         <input
@@ -169,19 +236,31 @@ export function StoresPage() {
 
       <ul className="record-list">
         {sorted.map((store) => (
-          <li key={store.id} className="record-card store-card">
-            <div className="record-summary" onClick={() => startEdit(store)}>
-              {listFields.map((f) =>
-                store.data[f.key] ? (
-                  <span key={f.key} className="record-field">
-                    {f.label}: {store.data[f.key]}
-                  </span>
-                ) : null
-              )}
+          <li
+            key={store.id}
+            className={`record-card store-card${store.id === activeStoreId ? ' is-active' : ''}`}
+            onClick={() => setActive(store.id)}
+          >
+            <div className="record-summary">
+              {listFields
+                .filter((f) => f.key !== 'notes')
+                .map((f) =>
+                  store.data[f.key] ? (
+                    <span key={f.key} className="record-field">
+                      {f.label}: {store.data[f.key]}
+                    </span>
+                  ) : null
+                )}
               <ContactChips contacts={contactsForStore(contacts, store.data.storeNumber ?? '')} />
             </div>
-            <button className="delete-button" onClick={() => handleDelete(store.id)}>
-              Delete
+            <button
+              className="secondary edit-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                startEdit(store);
+              }}
+            >
+              Edit
             </button>
           </li>
         ))}
