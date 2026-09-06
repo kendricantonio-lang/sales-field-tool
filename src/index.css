@@ -92,29 +92,67 @@ select {
   overflow-y: auto;
 }
 
-.bottom-nav {
-  flex-shrink: 0;
-  display: flex;
+.hamburger-button {
+  background: transparent;
+  color: var(--text);
+  padding: 0.3rem 0.6rem;
+  font-size: 1.3rem;
+  line-height: 1;
+  border-radius: 6px;
+}
+
+.hamburger-button:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.side-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 100;
+  animation: fade-in 0.15s ease;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 78vw;
+  max-width: 280px;
   background: var(--surface);
-  border-top: 1px solid var(--border);
-  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top);
+  animation: slide-in 0.18s ease;
 }
 
-.bottom-nav a {
-  flex: 1;
-  text-align: center;
-  padding: 0.9rem 0;
+.side-menu a {
+  padding: 1rem 1.25rem;
   text-decoration: none;
-  color: var(--muted);
+  color: var(--text);
   font-weight: 600;
-  font-size: 0.95rem;
-  border-top: 2px solid transparent;
+  font-size: 1.05rem;
+  border-left: 3px solid transparent;
 }
 
-.bottom-nav a.active {
+.side-menu a.active {
   color: var(--accent);
-  border-top-color: var(--accent);
+  border-left-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
 }
 
 .page-header {
