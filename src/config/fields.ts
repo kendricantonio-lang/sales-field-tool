@@ -39,6 +39,13 @@ export const STORE_FIELDS: FieldDef[] = [
   { key: 'notes', label: 'Notes', type: 'textarea' },
 ];
 
+export const EVENT_FIELDS: FieldDef[] = [
+  { key: 'date', label: 'Date', type: 'date', required: true, showInList: true },
+  { key: 'storeNumber', label: 'Store Number', type: 'text', showInList: true },
+  { key: 'title', label: 'Event', type: 'text', required: true, showInList: true },
+  { key: 'notes', label: 'Notes', type: 'textarea' },
+];
+
 export const CHECKLIST_FIELDS: FieldDef[] = [
   { key: 'visitDate', label: 'Date Visited', type: 'date', required: true, showInList: true },
   {

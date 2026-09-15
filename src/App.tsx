@@ -6,12 +6,14 @@ import { ContactsPage } from './pages/ContactsPage';
 import { StoresPage } from './pages/StoresPage';
 import { NotesPage } from './pages/NotesPage';
 import { MapPage } from './pages/MapPage';
+import { CalendarPage } from './pages/CalendarPage';
 
 const NAV_LINKS = [
   { to: '/notes', label: 'Notes' },
   { to: '/contacts', label: 'Contacts' },
   { to: '/stores', label: 'Stores' },
   { to: '/map', label: 'Map' },
+  { to: '/calendar', label: 'Calendar' },
 ];
 
 export default function App() {
@@ -75,6 +77,7 @@ export default function App() {
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/stores" element={<StoresPage />} />
           <Route path="/map" element={<MapPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           <Route path="*" element={<Navigate to="/notes" replace />} />
         </Routes>
       </main>
