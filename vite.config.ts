@@ -13,8 +13,8 @@ export default defineConfig({
         name: 'Sales Field Tool',
         short_name: 'Field Tool',
         description: 'Log store visit notes and manage contacts on the go.',
-        theme_color: '#2563eb',
-        background_color: '#f5f6f8',
+        theme_color: '#1f3a5f',
+        background_color: '#f5f4ef',
         display: 'standalone',
         start_url: '/',
         icons: [
