@@ -230,6 +230,13 @@ select {
   padding: 0.4rem 0.7rem;
 }
 
+.card-action-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
 .active-store-panel {
   border-color: var(--accent);
   border-width: 2px;

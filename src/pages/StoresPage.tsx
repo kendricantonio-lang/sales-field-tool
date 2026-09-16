@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CONTACT_FIELDS, STORE_FIELDS, type FieldDef } from '../config/fields';
 import { DynamicForm } from '../components/DynamicForm';
 import { normalizeStoreNumber } from '../lib/storeMatch';
@@ -15,6 +16,7 @@ import {
 } from '../lib/db';
 
 const listFields = STORE_FIELDS.filter((f) => f.showInList);
+const quickEditFields = STORE_FIELDS.filter((f) => f.key !== 'layoutNotes');
 const contactPreviewFields = CONTACT_FIELDS.filter((f) => f.key !== 'storeNumber');
 
 /** Numeric compare when both sides parse as numbers, otherwise alphabetical. */
@@ -83,6 +85,7 @@ export function StoresPage() {
     }
   });
   const [notesDraft, setNotesDraft] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     refresh();
@@ -214,6 +217,9 @@ export function StoresPage() {
             <button className="secondary" onClick={() => startEdit(activeStore)}>
               Edit Store Info
             </button>
+            <button className="secondary" onClick={() => navigate(`/stores/${activeStore.id}`)}>
+              View Full Details →
+            </button>
           </div>
         </div>
       )}
@@ -241,7 +247,7 @@ export function StoresPage() {
         <div className="panel">
           <h3>{editingId ? 'Edit Store' : 'New Store'}</h3>
           <DynamicForm
-            fields={STORE_FIELDS}
+            fields={quickEditFields}
             values={formValues}
             onChange={(key, value) => setFormValues((prev) => ({ ...prev, [key]: value }))}
           />
@@ -269,15 +275,26 @@ export function StoresPage() {
               <FieldList fields={listFields.filter((f) => f.key !== 'notes')} data={store.data} />
               <ContactChips contacts={contactsForStore(contacts, store.data.storeNumber ?? '')} />
             </div>
-            <button
-              className="secondary edit-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                startEdit(store);
-              }}
-            >
-              Edit
-            </button>
+            <div className="card-action-col">
+              <button
+                className="secondary edit-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  startEdit(store);
+                }}
+              >
+                Edit
+              </button>
+              <button
+                className="secondary edit-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/stores/${store.id}`);
+                }}
+              >
+                Details →
+              </button>
+            </div>
           </li>
         ))}
         {!loading && sorted.length === 0 && <p>No stores yet.</p>}

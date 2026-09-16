@@ -4,6 +4,7 @@ import { useAuth } from './context/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { ContactsPage } from './pages/ContactsPage';
 import { StoresPage } from './pages/StoresPage';
+import { StoreDetailPage } from './pages/StoreDetailPage';
 import { NotesPage } from './pages/NotesPage';
 import { BoardPage } from './pages/BoardPage';
 import { MapPage } from './pages/MapPage';
@@ -79,6 +80,7 @@ export default function App() {
           <Route path="/board" element={<BoardPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/stores" element={<StoresPage />} />
+          <Route path="/stores/:id" element={<StoreDetailPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="*" element={<Navigate to="/notes" replace />} />

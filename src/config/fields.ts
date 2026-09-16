@@ -37,6 +37,7 @@ export const STORE_FIELDS: FieldDef[] = [
   },
   { key: 'deliOps', label: 'Deli Ops', type: 'text', showInList: true },
   { key: 'notes', label: 'Notes', type: 'textarea' },
+  { key: 'layoutNotes', label: 'Store Layout Notes', type: 'textarea' },
 ];
 
 export const EVENT_FIELDS: FieldDef[] = [
