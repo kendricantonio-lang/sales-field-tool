@@ -532,3 +532,227 @@ select {
   min-height: 100vh;
   color: var(--muted);
 }
+
+.board-canvas {
+  width: 100%;
+  height: 65vh;
+  min-height: 360px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--border) 45%, transparent) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(color-mix(in srgb, var(--border) 45%, transparent) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.board-canvas-content {
+  position: relative;
+}
+
+.board-note {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.7rem 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.board-note.is-dragging {
+  cursor: grabbing;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+}
+
+.board-note.color-yellow {
+  background: #fbf0ad;
+  color: #4a3f0a;
+}
+
+.board-note.color-pink {
+  background: #fad3e3;
+  color: #5c1f38;
+}
+
+.board-note.color-blue {
+  background: #cfe3fb;
+  color: #1c3c63;
+}
+
+.board-note.color-green {
+  background: #d7f0d6;
+  color: #1e4720;
+}
+
+.board-note.color-purple {
+  background: #e6d9f7;
+  color: #3d2559;
+}
+
+.board-note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.board-note-header strong {
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.board-note-header .link-button {
+  color: inherit;
+  opacity: 0.6;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.board-note-meta {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.board-note-body {
+  margin: 0;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.board-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.board-checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.board-checklist-item input[type='checkbox'] {
+  width: auto;
+  margin-top: 0.15rem;
+}
+
+.board-checklist-item.is-done span {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.board-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.board-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.board-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.board-modal {
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  margin: 0;
+}
+
+.board-kind-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.board-kind-toggle button {
+  flex: 1;
+}
+
+.board-color-row {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.board-color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  padding: 0;
+  border: 2px solid transparent;
+}
+
+.board-color-swatch.is-selected {
+  border-color: var(--text);
+}
+
+.board-color-swatch.color-yellow {
+  background: #fbf0ad;
+}
+
+.board-color-swatch.color-pink {
+  background: #fad3e3;
+}
+
+.board-color-swatch.color-blue {
+  background: #cfe3fb;
+}
+
+.board-color-swatch.color-green {
+  background: #d7f0d6;
+}
+
+.board-color-swatch.color-purple {
+  background: #e6d9f7;
+}
+
+.board-checklist-edit .board-checklist-item {
+  background: color-mix(in srgb, var(--text) 4%, var(--surface));
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  cursor: default;
+}
+
+.board-checklist-edit .board-checklist-item span {
+  flex: 1;
+}
+
+.board-add-item-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.board-add-item-row input {
+  flex: 1;
+}

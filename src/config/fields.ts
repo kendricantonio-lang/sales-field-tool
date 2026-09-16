@@ -46,6 +46,26 @@ export const EVENT_FIELDS: FieldDef[] = [
   { key: 'notes', label: 'Notes', type: 'textarea' },
 ];
 
+export interface BoardNoteColor {
+  key: string;
+  label: string;
+}
+
+export const BOARD_NOTE_COLORS: BoardNoteColor[] = [
+  { key: 'yellow', label: 'Yellow' },
+  { key: 'pink', label: 'Pink' },
+  { key: 'blue', label: 'Blue' },
+  { key: 'green', label: 'Green' },
+  { key: 'purple', label: 'Purple' },
+];
+
+export const BOARD_NOTE_FIELDS: FieldDef[] = [
+  { key: 'title', label: 'Title', type: 'text', required: true, showInList: true },
+  { key: 'storeNumber', label: 'Store Number', type: 'text', showInList: true },
+  { key: 'division', label: 'Division', type: 'text', showInList: true, placeholder: 'e.g. Grocery, Frozen' },
+  { key: 'tags', label: 'Tags', type: 'text', placeholder: 'comma-separated, e.g. follow-up, urgent' },
+];
+
 export const CHECKLIST_FIELDS: FieldDef[] = [
   { key: 'visitDate', label: 'Date Visited', type: 'date', required: true, showInList: true },
   {

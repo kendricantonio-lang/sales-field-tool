@@ -5,11 +5,13 @@ import { LoginPage } from './pages/LoginPage';
 import { ContactsPage } from './pages/ContactsPage';
 import { StoresPage } from './pages/StoresPage';
 import { NotesPage } from './pages/NotesPage';
+import { BoardPage } from './pages/BoardPage';
 import { MapPage } from './pages/MapPage';
 import { CalendarPage } from './pages/CalendarPage';
 
 const NAV_LINKS = [
   { to: '/notes', label: 'Notes' },
+  { to: '/board', label: 'Board' },
   { to: '/contacts', label: 'Contacts' },
   { to: '/stores', label: 'Stores' },
   { to: '/map', label: 'Map' },
@@ -74,6 +76,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/notes" replace />} />
           <Route path="/notes" element={<NotesPage />} />
+          <Route path="/board" element={<BoardPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/stores" element={<StoresPage />} />
           <Route path="/map" element={<MapPage />} />

@@ -169,3 +169,46 @@ export async function deleteEvent(id: string): Promise<void> {
   const { error } = await supabase.from('events').delete().eq('id', id);
   if (error) throw error;
 }
+
+export interface BoardNoteRecord {
+  id: string;
+  data: FieldValues;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function listBoardNotes(): Promise<BoardNoteRecord[]> {
+  const { data, error } = await supabase
+    .from('board_notes')
+    .select('*')
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data as BoardNoteRecord[];
+}
+
+export async function createBoardNote(values: FieldValues): Promise<BoardNoteRecord> {
+  const { data: userData } = await supabase.auth.getUser();
+  const { data, error } = await supabase
+    .from('board_notes')
+    .insert({ data: values, user_id: userData.user?.id })
+    .select()
+    .single();
+  if (error) throw error;
+  return data as BoardNoteRecord;
+}
+
+export async function updateBoardNote(id: string, values: FieldValues): Promise<BoardNoteRecord> {
+  const { data, error } = await supabase
+    .from('board_notes')
+    .update({ data: values, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data as BoardNoteRecord;
+}
+
+export async function deleteBoardNote(id: string): Promise<void> {
+  const { error } = await supabase.from('board_notes').delete().eq('id', id);
+  if (error) throw error;
+}

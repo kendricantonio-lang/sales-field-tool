@@ -35,15 +35,25 @@ create table if not exists events (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists board_notes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  data jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create index if not exists contacts_user_id_idx on contacts (user_id);
 create index if not exists stores_user_id_idx on stores (user_id);
 create index if not exists visits_user_id_idx on visits (user_id);
 create index if not exists events_user_id_idx on events (user_id);
+create index if not exists board_notes_user_id_idx on board_notes (user_id);
 
 alter table contacts enable row level security;
 alter table stores enable row level security;
 alter table visits enable row level security;
 alter table events enable row level security;
+alter table board_notes enable row level security;
 
 drop policy if exists "Users manage own contacts" on contacts;
 create policy "Users manage own contacts" on contacts
@@ -65,6 +75,12 @@ create policy "Users manage own visits" on visits
 
 drop policy if exists "Users manage own events" on events;
 create policy "Users manage own events" on events
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users manage own board notes" on board_notes;
+create policy "Users manage own board notes" on board_notes
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
