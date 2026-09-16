@@ -3,6 +3,7 @@ import { CONTACT_FIELDS, STORE_FIELDS, type FieldDef } from '../config/fields';
 import { DynamicForm } from '../components/DynamicForm';
 import { normalizeStoreNumber } from '../lib/storeMatch';
 import { ACTIVE_STORE_KEY } from '../lib/activeStore';
+import { geocodeAddress } from '../lib/geocode';
 import {
   createStore,
   listContacts,
@@ -132,15 +133,31 @@ export function StoresPage() {
 
   async function handleSave() {
     try {
+      let saved: StoreRecord;
       if (editingId) {
-        await updateStore(editingId, formValues);
+        saved = await updateStore(editingId, formValues);
       } else {
-        await createStore(formValues);
+        saved = await createStore(formValues);
       }
       setShowForm(false);
       await refresh();
+      void geocodeIfNeeded(saved);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save store');
+    }
+  }
+
+  /** Fire-and-forget: fills in map coordinates for a newly saved/edited store so it shows up on the Map tab without an extra step. */
+  async function geocodeIfNeeded(store: StoreRecord) {
+    if (store.data.lat && store.data.lng) return;
+    if (!store.data.address && !store.data.city) return;
+    const result = await geocodeAddress(store.data.address ?? '', store.data.city ?? '');
+    if (!result) return;
+    try {
+      await updateStore(store.id, { ...store.data, lat: String(result.lat), lng: String(result.lng) });
+      await refresh();
+    } catch {
+      // Best-effort — a missing pin can still be filled in later via "Locate Stores" on the Map tab.
     }
   }
 
