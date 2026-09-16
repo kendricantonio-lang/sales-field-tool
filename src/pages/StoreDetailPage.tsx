@@ -67,6 +67,40 @@ export function StoreDetailPage() {
     setLoading(false);
   }
 
+  /** Pressing Enter on a "- " line continues the hyphen list; pressing it on an empty "- " line ends the list instead. */
+  function handleLayoutKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key !== 'Enter') return;
+    const textarea = e.currentTarget;
+    const { selectionStart, selectionEnd, value } = textarea;
+    if (selectionStart !== selectionEnd) return;
+
+    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
+    const lineEnd = value.indexOf('\n', selectionStart);
+    const currentLine = value.slice(lineStart, lineEnd === -1 ? value.length : lineEnd);
+    const match = /^(\s*)-\s(.*)$/.exec(currentLine);
+    if (!match) return;
+
+    e.preventDefault();
+    const [, indent, rest] = match;
+
+    if (rest.trim() === '') {
+      const newValue = value.slice(0, lineStart) + value.slice(selectionStart);
+      setLayoutDraft(newValue);
+      requestAnimationFrame(() => {
+        textarea.selectionStart = textarea.selectionEnd = lineStart;
+      });
+      return;
+    }
+
+    const insertion = `\n${indent}- `;
+    const newValue = value.slice(0, selectionStart) + insertion + value.slice(selectionStart);
+    setLayoutDraft(newValue);
+    const newCursor = selectionStart + insertion.length;
+    requestAnimationFrame(() => {
+      textarea.selectionStart = textarea.selectionEnd = newCursor;
+    });
+  }
+
   async function handleSaveLayout() {
     if (!store) return;
     try {
@@ -179,6 +213,7 @@ export function StoreDetailPage() {
         <textarea
           value={layoutDraft}
           onChange={(e) => setLayoutDraft(e.target.value)}
+          onKeyDown={handleLayoutKeyDown}
           placeholder="e.g. Deli case is at the back left, endcaps rotate monthly..."
           rows={10}
         />
